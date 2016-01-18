@@ -12,12 +12,18 @@ function init(editor, onSave) {
 		return;
 	}
 
+	let config = esformatter.rc(editor.getURI());
+
+	if (Object.keys(config).length === 0) {
+		return;
+	}
+
 	const selectedText = onSave ? null : editor.getSelectedText();
 	const text = selectedText || editor.getText();
 	let retText = '';
 
 	try {
-		retText = esformatter.format(text, esformatter.rc(editor.getURI()));
+		retText = esformatter.format(text, config);
 	} catch (err) {
 		console.error(err);
 		atom.notifications.addError('esformatter', {detail: err.message});
